@@ -15,8 +15,6 @@ export interface TodoData {
 }
 
 class Todo extends Model<TodoData> {
-    static table = 'todos';
-
     constructor(
         attributes: TodoData,
     ) {
@@ -54,6 +52,9 @@ class Todo extends Model<TodoData> {
         };
     }
 
+    static getTable() {
+        return 'todos';
+    }
 }
 
 export default Todo;

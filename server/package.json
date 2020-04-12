@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "dev": "nodemon --exec 'ts-node -r tsconfig-paths/register src/index.ts'"
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
+    "dev:watch": "nodemon --exec 'ts-node -r tsconfig-paths/register src/index.ts'"
   },
   "repository": {
     "type": "git",
