@@ -33,9 +33,11 @@ class TodoRepository implements RepositoryInterface<TodoData> {
     }
 
     remove(id: ID) {
-        return db.get(Todo.getTable())
+        db.get(Todo.getTable())
             .remove({ id })
             .write();
+
+        return id;
     }
 
     all() {

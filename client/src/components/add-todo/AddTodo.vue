@@ -13,8 +13,9 @@ import { Component, Vue } from 'vue-property-decorator';
 /**
  * Internal dependencies.
  */
-import { createTodoQuery } from '@/queries-and-mutations/todos/mutations';
-import { getAllTodosQuery } from '@/queries-and-mutations/todos/queries';
+import { createTodoMutation } from '@/features/todos/queries-and-mutations/mutations';
+import { getAllTodosQuery } from '@/features/todos/queries-and-mutations/queries';
+import { Todo } from '@/features/todos/models/Todo';
 
 @Component
 export default class AddTodo extends Vue {
@@ -22,17 +23,17 @@ export default class AddTodo extends Vue {
 
     addTodo() {
         this.$apollo.mutate({
-            mutation: createTodoQuery,
+            mutation: createTodoMutation,
             variables: {
                 name: this.name,
             },
             update(cache, response) {
-                const { todos } = cache.readQuery<any>({ query: getAllTodosQuery });
+                const data = cache.readQuery<{ todos: Todo[] }>({ query: getAllTodosQuery });
 
                 cache.writeQuery({
                     query: getAllTodosQuery,
                     data: {
-                        todos: [...todos, response!.data!.createTodo],
+                        todos: [...data!.todos, response!.data!.createTodo],
                     },
                 });
             },

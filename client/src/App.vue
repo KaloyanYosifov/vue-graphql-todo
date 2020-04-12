@@ -5,7 +5,7 @@
         <add-todo />
 
         <div v-if="todos && todos.length">
-            <div :key="todo.id" v-for="todo in todos">
+            <div :key="todo.id" v-for="todo in todos" @click="removeTodo(todo.id)">
                 <p>
                     Id: {{todo.id}}
                 </p>
@@ -27,8 +27,10 @@ import { Component, Vue } from 'vue-property-decorator';
 /**
  * Internal dependencies.
  */
-import { getAllTodosQuery } from '@/queries-and-mutations/todos/queries';
+import { Todo } from '@/features/todos/models/Todo';
 import AddTodo from '@/components/add-todo/AddTodo.vue';
+import { getAllTodosQuery } from '@/features/todos/queries-and-mutations/queries';
+import { deleteTodoQuery } from '@/features/todos/queries-and-mutations/mutations';
 
 @Component({
     components: { AddTodo },
@@ -39,7 +41,28 @@ import AddTodo from '@/components/add-todo/AddTodo.vue';
     },
 })
 export default class App extends Vue {
-    protected todos!: { id: string | number; name: string }[];
+    protected todos!: Todo[];
+
+    removeTodo(id: string | number) {
+        this.$apollo.mutate({
+            mutation: deleteTodoQuery,
+            variables: {
+                id,
+            },
+            update(cache) {
+                const data = cache.readQuery<{ todos: Todo[] }>({
+                    query: getAllTodosQuery,
+                });
+
+                cache.writeQuery({
+                    query: getAllTodosQuery,
+                    data: {
+                        todos: data!.todos.filter(todo => todo.id !== id),
+                    },
+                });
+            },
+        });
+    }
 }
 </script>
 
