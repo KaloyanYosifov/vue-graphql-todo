@@ -1,20 +1,45 @@
 <template>
     <div id="app">
-        <img alt="Vue logo" src="./assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+        Hello There
+
+        <add-todo />
+
+        <div v-if="todos && todos.length">
+            <div :key="todo.id" v-for="todo in todos">
+                <p>
+                    Id: {{todo.id}}
+                </p>
+
+                <p>
+                    Name: {{todo.name}}
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
+/**
+ * External dependencies.
+ */
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+
+/**
+ * Internal dependencies.
+ */
+import { getAllTodosQuery } from '@/queries-and-mutations/todos/queries';
+import AddTodo from '@/components/add-todo/AddTodo.vue';
 
 @Component({
-    components: {
-        HelloWorld,
+    components: { AddTodo },
+    apollo: {
+        todos: {
+            query: getAllTodosQuery,
+        },
     },
 })
 export default class App extends Vue {
+    protected todos!: { id: string | number; name: string }[];
 }
 </script>
 
