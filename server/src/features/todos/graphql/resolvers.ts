@@ -8,7 +8,7 @@ import Todo from '@/features/todos/models/Todo';
 const resolvers: IResolvers = {
     Query: {
         todos(_, __, { TodoRepository }: Context) {
-            return TodoRepository.all();
+            return TodoRepository.all().map(todo => todo.getAttributes());
         },
     },
     Mutation: {
