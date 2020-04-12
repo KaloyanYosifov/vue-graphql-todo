@@ -4,13 +4,14 @@
 import { ID } from '@/types';
 import db from '@/database';
 import Todo from '@/features/todos/models/Todo';
+import { RepositoryInterface } from '@/features/todos/repositories/RepositoryInterface';
 
 interface TodoFilters {
     id?: ID;
     name?: string;
 }
 
-class TodoRepository {
+class TodoRepository implements RepositoryInterface {
     create(todo: Todo) {
         db.get(Todo.getTable())
             .push(todo.getAttributes())
@@ -19,10 +20,13 @@ class TodoRepository {
         return todo;
     }
 
-    find(filters?: TodoFilters) {
+    find(filters: TodoFilters) {
         return db.get(Todo.getTable())
             .filter(filters)
-            .value();
+            .value()
+            .map((todoData: any) => {
+                return new Todo(todoData.id, todoData.name);
+            });
     }
 
     remove(id: ID) {
@@ -30,6 +34,15 @@ class TodoRepository {
             .remove({ id })
             .write();
     }
+
+    all() {
+        return db.get(Todo.getTable())
+            .value()
+            .map((todoData: any) => {
+                return new Todo(todoData.id, todoData.name);
+            });
+    }
 }
 
-export default TodoRepository;
+const todoRepository = new TodoRepository();
+export default todoRepository;

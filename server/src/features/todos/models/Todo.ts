@@ -7,12 +7,17 @@ import { v4 as uuidv4 } from 'uuid';
  * Internal dependencies.
  */
 import { ID } from '@/types';
+import Model from '@/features/todos/models/Model';
 
-class Todo {
+class Todo extends Model {
+    static table = 'todos';
+
     constructor(
         protected id: ID = uuidv4(),
         protected name: string = '',
-    ) {}
+    ) {
+        super();
+    }
 
     setId(id: ID) {
         this.id = id;
@@ -41,10 +46,6 @@ class Todo {
             id,
             name,
         };
-    }
-
-    static getTable() {
-        return 'todos';
     }
 }
 

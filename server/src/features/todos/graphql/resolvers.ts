@@ -2,14 +2,12 @@
  * External dependencies.
  */
 import { IResolvers } from 'graphql-tools';
+import { RepositoryInterface } from '@/features/todos/repositories/RepositoryInterface';
 
 const resolvers: IResolvers = {
     Query: {
-        todos() {
-            return [{
-                id: 'random',
-                name: 'Todo',
-            }];
+        todos(_, __, { TodoRepository }: { TodoRepository: RepositoryInterface }) {
+            return TodoRepository.all();
         },
     },
 };
