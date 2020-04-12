@@ -3,7 +3,7 @@
  */
 import { ID } from '@/types';
 import db from '@/database';
-import Todo from '@/features/todos/models/Todo';
+import Todo, { TodoData } from '@/features/todos/models/Todo';
 import { RepositoryInterface } from '@/features/todos/repositories/RepositoryInterface';
 
 interface TodoFilters {
@@ -11,7 +11,7 @@ interface TodoFilters {
     name?: string;
 }
 
-class TodoRepository implements RepositoryInterface {
+class TodoRepository implements RepositoryInterface<TodoData> {
     create(todo: Todo) {
         db.get(Todo.getTable())
             .push(todo.getAttributes())
@@ -25,7 +25,10 @@ class TodoRepository implements RepositoryInterface {
             .filter(filters)
             .value()
             .map((todoData: any) => {
-                return new Todo(todoData.id, todoData.name);
+                return new Todo({
+                    id: todoData.id,
+                    name: todoData.name,
+                });
             });
     }
 
@@ -39,7 +42,10 @@ class TodoRepository implements RepositoryInterface {
         return db.get(Todo.getTable())
             .value()
             .map((todoData: any) => {
-                return new Todo(todoData.id, todoData.name);
+                return new Todo({
+                    id: todoData.id,
+                    name: todoData.name,
+                });
             });
     }
 }

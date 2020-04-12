@@ -9,44 +9,51 @@ import { v4 as uuidv4 } from 'uuid';
 import { ID } from '@/types';
 import Model from '@/features/todos/models/Model';
 
-class Todo extends Model {
+export interface TodoData {
+    id?: ID;
+    name: string;
+}
+
+class Todo extends Model<TodoData> {
     static table = 'todos';
 
     constructor(
-        protected id: ID = uuidv4(),
-        protected name: string = '',
+        attributes: TodoData,
     ) {
-        super();
+        super(attributes);
     }
 
     setId(id: ID) {
-        this.id = id;
+        this.attributes.id = id;
 
         return this;
     }
 
     setName(name: string) {
-        this.name = name;
+        this.attributes.name = name;
 
         return this;
     }
 
     getId() {
-        return this.id;
+        return this.attributes.id;
     }
 
     getName() {
-        return this.name;
+        return this.attributes.name;
     }
 
     getAttributes() {
-        const { id = uuidv4(), name } = this;
+        return this.attributes;
+    }
 
+    protected getDefaults() {
         return {
-            id,
-            name,
+            id: uuidv4(),
+            name: '',
         };
     }
+
 }
 
 export default Todo;

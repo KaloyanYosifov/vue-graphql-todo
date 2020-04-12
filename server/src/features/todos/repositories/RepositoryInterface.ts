@@ -4,12 +4,12 @@
 import { ID } from '@/types';
 import Model from '@/features/todos/models/Model';
 
-export interface RepositoryInterface {
-    create(model: Model): Model;
+export interface RepositoryInterface<T> {
+    create(model: Model<T>): Model<T>;
 
-    find(filters: any): Model[];
+    find(filters: any): Model<T>[];
 
     remove(id: ID): any;
 
-    all(): Model[];
+    all(): Model<T>[];
 }
