@@ -2,17 +2,25 @@
     <div id="app">
         Hello There
 
-        <add-todo />
+        <edit-todo v-if="selectedTodo" :todo="selectedTodo" @updated="selectedTodo = null" />
 
-        <div v-if="todos && todos.length">
-            <div :key="todo.id" v-for="todo in todos" @click="removeTodo(todo.id)">
-                <p>
-                    Id: {{todo.id}}
-                </p>
+        <div v-else>
+            <add-todo />
 
-                <p>
-                    Name: {{todo.name}}
-                </p>
+            <div v-if="todos && todos.length">
+                <div :key="todo.id" v-for="todo in todos" @click="removeTodo(todo.id)">
+                    <p>
+                        Id: {{todo.id}}
+                    </p>
+
+                    <p>
+                        Name: {{todo.name}}
+                    </p>
+
+                    <button @click.prevent.stop="selectedTodo = todo">
+                        Edit todo
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -31,9 +39,10 @@ import { Todo } from '@/features/todos/models/Todo';
 import AddTodo from '@/components/add-todo/AddTodo.vue';
 import { getAllTodosQuery } from '@/features/todos/queries-and-mutations/queries';
 import { deleteTodoQuery } from '@/features/todos/queries-and-mutations/mutations';
+import EditTodo from '@/components/edit-todo/EditTodo.vue';
 
 @Component({
-    components: { AddTodo },
+    components: { EditTodo, AddTodo },
     apollo: {
         todos: {
             query: getAllTodosQuery,
@@ -42,6 +51,8 @@ import { deleteTodoQuery } from '@/features/todos/queries-and-mutations/mutation
 })
 export default class App extends Vue {
     protected todos!: Todo[];
+
+    protected selectedTodo: Todo | null = null;
 
     removeTodo(id: string | number) {
         this.$apollo.mutate({

@@ -12,6 +12,15 @@ export const createTodoMutation = gql`
     }
 `;
 
+export const updateTodoMutation = gql`
+    mutation updateTodo($input: UpdateTodoInput!) {
+        updateTodo(input: $input) {
+            id
+            name
+        }
+    }
+`;
+
 export const deleteTodoQuery = gql`
     mutation deleteTodo($id: ID!) {
         deleteTodo(input: {id: $id}) {

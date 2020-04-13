@@ -20,6 +20,18 @@ class TodoRepository implements RepositoryInterface<TodoData> {
         return todo;
     }
 
+    update(todo: Todo) {
+        const newAttributes = todo.getAttributes();
+        delete newAttributes['id'];
+
+        db.get(Todo.getTable())
+            .find({ id: todo.getId() })
+            .assign({ ...newAttributes })
+            .write();
+
+        return todo;
+    }
+
     find(filters: TodoFilters) {
         return db.get(Todo.getTable())
             .filter(filters)

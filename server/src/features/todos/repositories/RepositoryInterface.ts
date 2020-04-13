@@ -9,6 +9,8 @@ export interface RepositoryInterface<T> {
 
     find(filters: any): Model<T>[];
 
+    update(model: Model<T>): Model<T>;
+
     remove(id: ID): any;
 
     all(): Model<T>[];

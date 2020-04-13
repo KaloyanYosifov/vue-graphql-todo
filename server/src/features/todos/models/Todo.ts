@@ -42,7 +42,7 @@ class Todo extends Model<TodoData> {
     }
 
     getAttributes() {
-        return this.attributes;
+        return { ...this.attributes };
     }
 
     protected getDefaults() {

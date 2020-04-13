@@ -17,6 +17,9 @@ const resolvers: IResolvers = {
                 new Todo({ name: input.name }),
             ).getAttributes();
         },
+        updateTodo(_, { input }, { TodoRepository }: Context) {
+            return TodoRepository.update(new Todo({ ...input })).getAttributes();
+        },
         deleteTodo(_, { input }, { TodoRepository }: Context) {
             return {
                 id: TodoRepository.remove(input.id),
